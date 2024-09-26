@@ -202,6 +202,7 @@ class NaiveRendererAndLoss(BaseRender):
         if point_weight_pixel is not None:
             ret["point_weight_pixel"] = point_weight_pixel.data
         ret['render'] = rendered_image[:3]
+        print("rendering happens at ... ", ret['render'].shape)
         return ret, model_data
 
     def prepare_camera(self, batch, bn, background, is_train=False):

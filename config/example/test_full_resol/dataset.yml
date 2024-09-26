@@ -1,7 +1,7 @@
 #root: data/feicuiwan_sample_folder
 #PLYNAME: data/feicuiwan_sample_folder/sparse/0/sparse.npz
-root: data/zoomgs_01
-PLYNAME: data/zoomgs_01/sparse/0/sparse.npz
+root: data/zoomgs_01_full
+PLYNAME: data/zoomgs_01_full/sparse/0/sparse.npz
 scale3d: 1.
 xyz_scale: 1.
 
@@ -42,7 +42,7 @@ val_dataset:
     cache: cache_val.pkl
     pre_undis: True
     share_camera: False
-    scales: [4]
+    scales: [1] # [4]
     znear: 0.001
     zfar: 100.
     scale3d: $scale3d

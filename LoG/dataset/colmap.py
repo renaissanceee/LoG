@@ -47,6 +47,7 @@ def read_undistort_rescale_write(info):
             camera['K'] = newK
 
     for scale in info['scales']:
+        print("scale: ", scale)
         cachename = join(info['cache'], str(scale), info['imgname'])
         if os.path.exists(cachename):
             continue
@@ -55,6 +56,8 @@ def read_undistort_rescale_write(info):
         W = int(camera['W'] / scale)
         H = int(camera['H'] / scale)
         dst = cv2.resize(img, (W, H), interpolation=cv2.INTER_AREA)
+        print("!!! resize here")
+        print(f"H,W:{camera['H']},{camera['W']}->{H},{W}")
         os.makedirs(os.path.dirname(cachename), exist_ok=True)
         cv2.imwrite(cachename, dst)
     return 0
@@ -125,6 +128,8 @@ class ImageDataset(ImageBase):
         self.cachedir = cachedir
         print(f'[{self.__class__.__name__}] cache dir: {self.cachedir}')
         flag, infos = self.read_cache(name=cachedir+'.pkl')
+        # print(flag, infos)# True, []
+        # flag = False
         if not flag:
             cameras = self.check_cameras(scale3d=scale3d, scale_camera_K=scale_camera_K)
             # undistort and scale
@@ -150,12 +155,16 @@ class ImageDataset(ImageBase):
                     'scales': scales
                 })
             print(f'[{self.__class__.__name__}] undistort and scale {len(infos)} images ')
+            print("aaaa")
+            print(infos)
             for info in tqdm(infos):
                 read_undistort_rescale_write(info)
                 info['camera'].pop('mapx', None)
                 info['camera'].pop('mapy', None)
             self.write_cache(infos, name=cachedir+'.pkl')
-        
+        print("scales: ", scales)
+        print("cur_scale: ", scales[-1])
+        # import pdb;pdb.set_trace() # when no cache.pkl provided: infos=[]
         centers = np.stack([-info['camera']['R'].T @ info['camera']['T'] for info in infos], axis=0)
         offset, radius = get_center_and_diag(centers)
         print(f'[{self.__class__.__name__}] offset: {offset}, radius: {radius}')
@@ -216,6 +225,8 @@ class ImageDataset(ImageBase):
             if self.read_image:
                 # cv2.INTER_AREA for anti-alias resize
                 img = cv2.resize(img, (camera['W'], camera['H']), interpolation=cv2.INTER_AREA)
+                print("!!! resize here")
+                asd
         else:
             camera = rescale_camera(data['camera'], self.current_scale)
         # check mask

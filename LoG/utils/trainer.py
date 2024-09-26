@@ -9,7 +9,6 @@ import torch.nn as nn
 from .recorder import Recorder
 from .config import load_object, Config
 from collections import defaultdict
-# import matplotlib.pyplot as plt
 
 def imwrite(imgname, img):
     os.makedirs(os.path.dirname(imgname), exist_ok=True)
